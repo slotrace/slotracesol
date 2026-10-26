@@ -20,6 +20,7 @@ test('private upstream URL and provider errors never reach the client',async()=>
 test('server fixes the RPC method and returns actual record data',async()=>{
   let body;
   const response=await transactionResponse(request(),{SOLANA_RPC_URL:'https://provider.example'},async(url,options)=>{body=JSON.parse(options.body);return new Response(JSON.stringify({result:{slot:123}}));});
+  assert.equal(body.params[1].maxSupportedTransactionVersion,1);
   assert.equal(body.method,'getTransaction');assert.equal(body.params[0],signature);assert.deepEqual((await response.json()).result,{slot:123});
 });
 test('null RPC records remain null rather than becoming failure claims',async()=>{
