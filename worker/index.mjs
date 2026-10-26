@@ -25,11 +25,11 @@ export async function transactionResponse(request,env={},upstreamFetch=fetch){
   let parsed;try{parsed=new URL(endpoint);if(parsed.protocol!=='https:')throw new Error();}catch(_){return json({error:'The network data service is not configured correctly.'},503);}
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),18000);
   try{
-    const response=await upstreamFetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({jsonrpc:'2.0',id:1,method:'getTransaction',params:[signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}]})});
+    const response=await upstreamFetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({jsonrpc:'2.0',id:1,method:'getTransaction',params:[signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:1}]})});
     if(!response.ok)return json({error:response.status===429?'The data provider is busy. Please retry shortly.':'The data provider could not complete this request.'},response.status===429?429:502);
     const payload=await response.json();
     // Provider messages can include private URLs. Never forward them to clients.
-    if(payload.error)return json({error:'The data provider rejected this transaction request.',code:typeof payload.error.code==='number'?payload.error.code:undefined},502);
+    if(payload.error)return json({error:payload.error.code===-32015?'The data provider returned an unsupported transaction version.':'The data provider rejected this transaction request.',code:typeof payload.error.code==='number'?payload.error.code:undefined},502);
     if(!Object.hasOwn(payload,'result'))return json({error:'The data provider returned an incomplete response.'},502);
     return json({result:payload.result,provider:'SLOTRACE RPC',network});
   }catch(error){return json({error:error.name==='AbortError'?'The data request timed out. Please retry.':'The data provider is temporarily unavailable.'},502);}
