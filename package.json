@@ -11,7 +11,8 @@
     "launch:arm": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs arm",
     "launch:watch": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs watch",
     "launch:publish": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs publish",
-    "launch:status": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs status"
+    "launch:status": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs status",
+    "launch:readme": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs readme"
   },
   "engines": {
     "node": ">=22"

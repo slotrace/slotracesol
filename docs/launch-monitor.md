@@ -79,6 +79,18 @@ The site updates the header, copy buttons, token page and token-status passages
 in documentation. Publishing a mint does not turn proposed token utility into a
 delivered feature or claim that distribution details have been decided.
 
+### README contract
+
+README has a dedicated contract block. To update it automatically after website
+publication, optionally set `GITHUB_TOKEN` in `.env.launch.local`: a fine-grained
+token with Contents write for `slotrace/slotracesol` only. The monitor reads the
+published website identity and updates only this block, with a current GitHub SHA
+to prevent overwriting concurrent edits. A different existing mint is rejected.
+With no local GitHub token, the connected GitHub app in the chat can make this
+update when notified of launch; do not assume it happens unattended.
+
+Retry README synchronization independently with `npm run launch:readme`.
+
 ## Dry run and recovery
 
 ```sh

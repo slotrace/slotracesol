@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {setTimeout as sleep} from 'node:timers/promises';
 import {createRpc,validateConfig,MAINNET,discoverSignatures,inspectSignature,verifyMintAccount,decode58} from './core.mjs';
 import {readPublished,publishCandidate} from './publish.mjs';
+import {syncReadme} from './readme.mjs';
 const root=resolve(fileURLToPath(new URL('../..',import.meta.url)));
 const config=validateConfig(JSON.parse(await readFile(resolve(root,'launch.config.json'),'utf8')));
 const command=process.argv[2],dry=process.argv.includes('--dry-run');
@@ -12,6 +13,7 @@ const rpc=createRpc(process.env.SOLANA_RPC_URL);
 let stopping=false;
 process.on('SIGINT',()=>{stopping=true;});process.on('SIGTERM',()=>{stopping=true;});
 const log=text=>console.log(new Date().toISOString()+' '+text);
+async function syncPublishedReadme(){const result=await syncReadme(config);log(result==='needs-github-token'?'README: add the optional GitHub token or ask the connected GitHub app to publish the mint.':'README: '+result);}
 async function save(state){await writeFile(stateFile+'.tmp',JSON.stringify(state,null,2)+'\n',{mode:0o600});await rename(stateFile+'.tmp',stateFile);}
 async function load(){try{return JSON.parse(await readFile(stateFile,'utf8'));}catch(error){if(error.code==='ENOENT')return null;throw error;}}
 async function preflight(requirePublish){
@@ -22,10 +24,11 @@ async function preflight(requirePublish){
 }
 async function verify(candidate){return verifyMintAccount(await rpc('getAccountInfo',[candidate.mint,{encoding:'jsonParsed',commitment:'finalized'}]),candidate);}
 async function main(){
- if(!['arm','watch','publish','status'].includes(command))throw new Error('Usage: arm | watch [--dry-run] | publish --signature SIGNATURE | status');
+ if(!['arm','watch','publish','status','readme'].includes(command))throw new Error('Usage: arm | watch [--dry-run] | publish --signature SIGNATURE | status | readme');
  const lock=await open(lockFile,'wx',0o600).catch(()=>{throw new Error('Another monitor may be running. If it crashed, check that it stopped before removing the .lock file.');});
  try{
   if(command==='status'){const state=await load();log(JSON.stringify({mode:dry?'dry-run':'publish',state:state||'not armed',website:await readPublished(config)}));return;}
+  if(command==='readme'){if(dry)log('README dry-run: '+(await readPublished(config)).status);else await syncPublishedReadme();return;}
   const website=await preflight(!dry);
   if(command==='arm'){
    if(await load())throw new Error('An arm checkpoint already exists. Use watch to resume; arming never overwrites it.');
@@ -41,11 +44,11 @@ async function main(){
    if(!candidates||candidates.length!==1)throw new Error('This transaction does not uniquely create SLOTRACE / SLOT with the configured developer.');
    const candidate=await verify(candidates[0]);
    if(dry){log('VERIFIED (dry-run) '+JSON.stringify(candidate));return;}
-   await publishCandidate(candidate,config,root);log('PUBLISHED '+candidate.mint+' on '+config.siteUrl);return;
+   await publishCandidate(candidate,config,root);log('PUBLISHED '+candidate.mint+' on '+config.siteUrl);await syncPublishedReadme();return;
   }
   const state=await load();
   if(!state||state.developer!==config.developer||state.symbol!=='SLOT')throw new Error('Run arm before the token launch.');
-  if(state.published){log('Already published '+state.published.mint);return;}
+  if(state.published){log('Already published '+state.published.mint);if(!dry)await syncPublishedReadme();return;}
   let failures=0;
   log('WATCHING '+config.developer+' / pump.fun / SLOTRACE / SLOT'+(dry?' / DRY RUN':''));
   while(!stopping){
@@ -67,7 +70,7 @@ async function main(){
      const candidate=await verify(state.candidates[0]);
      if(dry){log('VERIFIED; dry-run made no website changes: '+candidate.mint);return;}
      await publishCandidate(candidate,config,root);
-     state.published=candidate;await save(state);log('PUBLISHED and verified on '+config.siteUrl+': '+candidate.mint);return;
+     state.published=candidate;await save(state);log('PUBLISHED and verified on '+config.siteUrl+': '+candidate.mint);await syncPublishedReadme();return;
     }
     failures=0;
    }catch(error){

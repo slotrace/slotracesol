@@ -8,6 +8,10 @@ Transaction intelligence for Solana. Inspect confirmed transactions by signature
 
 **Ticker: `$SLOT`** · **Network: Solana**
 
+<!-- SLOT_CONTRACT_START -->
+**Contract (Solana mint):** soon
+<!-- SLOT_CONTRACT_END -->
+
 The official mint address will appear in the website header and on the [token page](https://slotrace.tech/token/) after verified publication. Until then, the site displays `CA: soon`.
 
 Token utility remains under development. Basic transaction inspection does not require a token. The SDK, replay and contributor network are planned capabilities, not currently available services.
