@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+work/
+outputs/
+node_modules/
+*.tar.gz
+*.zip
+dist/
+
+.openai/
+public/**/*.html
+public/docs/search-index.json

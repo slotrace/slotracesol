@@ -1,0 +1,13 @@
+{
+  "name": "slotrace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Solana transaction inspection with a server-side RPC boundary",
+  "scripts": {
+    "build": "python scripts/build-pages.py && node scripts/build-worker.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test",
+    "check:links": "python scripts/check-links.py"
+  },
+  "engines": {"node": ">=20"}
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d0b">
+  <meta name="description" content="SLOTRACE — a flight recorder for Solana transactions. Read Solana transaction evidence, logs and instructions.">
+  <title>SLOTRACE — Every transaction. Every trace.</title>
+  <link rel="icon" href="mark.svg?v=4" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pages.css"><link rel="stylesheet" href="/token-scene.css"><link rel="stylesheet" href="/explorer.css">
+  <script defer src="vendor/gsap.min.js"></script><script defer src="vendor/ScrollTrigger.min.js"></script><script defer src="/hero-motion.js"></script><script defer src="/transaction.js"></script><script defer src="/explorer.js"></script><script defer src="/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="read-progress" aria-hidden="true"></div>
+{{HEADER}}
+<main id="main">
+<section class="hero wrap" aria-labelledby="hero-title">
+  <div class="hero-top"><span class="eyebrow"><i></i> SOLANA TRANSACTION OBSERVABILITY</span><span class="mono muted">TRANSACTION INTELLIGENCE</span></div>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <h1 id="hero-title"><span class="headline-line">Every</span><span class="headline-line">transaction.</span><span class="headline-line yellow">Every trace.</span></h1>
+      <p class="intro">The flight recorder for Solana transactions.</p>
+      <p class="subcopy">Follow the signal. Find the failure.<br>See the story beneath the signature.</p>
+      <div class="actions"><a class="button primary" href="#explorer">Open explorer <span>↗</span></a><a class="text-link" href="/docs/">Read the docs <span>↗</span></a></div>
+    </div>
+    <div class="hero-instrument">
+      <div class="instrument-label mono"><span>TX / SIGNAL ROUTE</span><span class="yellow">● SIGNAL FLOW</span></div>
+      <svg class="trace-map" viewBox="0 0 640 460" role="img" aria-labelledby="map-title"><title id="map-title">A transaction signal travels from submission through simulation to confirmation</title>
+        <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#1b211b" stroke-width=".6"/></pattern></defs>
+        <rect width="640" height="460" fill="url(#grid)"/>
+        <g class="planes" fill="none" stroke="#384038" stroke-width="1"><path d="M54 165 312 22 590 146 330 290Z"/><path d="M54 224 312 81 590 205 330 349Z"/><path d="M54 283 312 140 590 264 330 408Z"/><path d="M54 342 312 199 590 323 330 467Z"/><path stroke-dasharray="3 6" d="M54 165V342M312 22V199M590 146V323M330 290V467"/>
+        <path opacity=".5" d="m120 188 260 116M188 151 447 267M251 116 511 232M122 247 383 363M186 211 447 327M251 175 510 291M120 307 383 423M186 271 447 387M251 235 510 351"/></g>
+        <g class="ghost-routes" fill="none" stroke="#495249"><path d="m82 327 97-54 82 37 90-50 104 47 65-36"/><path d="m142 159 94 42 117-65 124 55"/><path d="m187 389 68-38 75 34 119-66"/></g>
+        <path class="route-base" d="M94 320 214 253 214 204 344 132 428 170 528 114"/>
+        <path id="route" d="M94 320 214 253 214 204 344 132 428 170 528 114"/>
+        <g class="map-node" data-node="0"><rect x="88" y="314" width="12" height="12"/><text x="68" y="354">SUBMITTED</text><text class="secondary" x="68" y="372">01 / RPC CLIENT</text></g>
+        <g class="map-node" data-node="1"><rect x="208" y="198" width="12" height="12"/><text x="100" y="183">SIMULATED</text><text class="secondary" x="100" y="199">02 / EXECUTION CHECK</text></g>
+        <g class="map-node" data-node="2"><rect x="522" y="108" width="12" height="12"/><text x="440" y="73">CONFIRMED</text><text class="secondary" x="440" y="91">03 / ON-CHAIN</text></g>
+        <rect id="packet" x="-5" y="-5" width="10" height="10" fill="#dfff00"/>
+        <g class="map-cross" stroke="#7b857b"><path d="M25 24H41M33 16V32M594 410H610M602 402V418"/></g>
+      </svg>
+      <div class="map-caption mono"><span>SIGNAL / NOT TO SCALE</span><span>SLOTRACE LAB</span></div>
+      <div class="hero-terminal"><div class="terminal-head mono"><span><b class="yellow">●</b> TRACE MONITOR</span><span id="hero-status">READY</span></div><div class="hero-log" aria-hidden="true"><div><span>01 /</span> Signature received <b>↗</b></div><div><span>02 /</span> Simulation complete <b>✓</b></div><div><span>03 /</span> Confirmation observed <b>✓</b></div></div><div class="playback mono"><span>WORKFLOW VISUALIZATION</span><div><button id="pause" type="button" aria-pressed="false">Ⅱ Pause</button><button id="replay" type="button">↺ Replay</button></div></div></div>
+    </div>
+  </div>
+  <div class="hero-bottom"><span class="mono">LESS GUESSING. MORE TRACING.</span><a class="mono muted" href="#signal">SCROLL TO DECODE <span class="scroll-arrow">↓</span></a></div>
+</section>
+<section class="signal wrap" id="signal" aria-labelledby="signal-title">
+  <div class="section-label mono"><span>01 / FOLLOW THE SIGNAL</span><span>FROM A SIGNATURE TO A STORY</span></div>
+  <h2 id="signal-title" class="reveal">Success is a status.<br><span class="muted">Understanding is a trace.</span></h2>
+  <div class="feature-row reveal"><span class="feature-num">01</span><div><h3>Trace the journey.</h3><p>Bring instructions, logs and account changes into one readable view. Start with what the chain can tell you.</p></div><div class="journey"><div class="journey-line"></div><span><i></i>SUBMIT</span><span><i></i>SIMULATE</span><span><i></i>CONFIRM</span></div></div>
+  <div class="feature-row reveal"><span class="feature-num">02</span><div><h3>Find the failure.</h3><p>Move from an error code to the instruction that stopped execution. Keep context close to the problem.</p></div><div class="error-preview mono"><div><span>01 / COMPUTE BUDGET</span><b>✓</b></div><div><span>02 / TRANSFER</span><b>✓</b></div><div class="error-line"><span>03 / SWAP</span><b>FAILED ↗</b></div></div></div>
+  <div class="feature-row reveal"><span class="feature-num">03</span><div><h3>Understand the delay.</h3><p>A future SDK would connect application timestamps with RPC observations. Make the invisible wait visible.</p></div><div class="latency-preview"><div class="latency-bars"><i></i><i></i><i></i><i></i><i></i></div><div class="mono muted">APPLICATION → RPC → CONFIRMATION</div><small class="mono">SDK / IN DEVELOPMENT</small></div></div>
+</section>
+{{EXPLORER}}
+<section class="architecture wrap" id="architecture" aria-labelledby="architecture-title"><div class="section-label mono"><span>03 / BUILT IN LAYERS</span><span>THE DEVELOPMENT PATH</span></div><h2 id="architecture-title" class="reveal">Start with evidence.<br><span class="muted">Build toward context.</span></h2>
+  <div class="phases"><article class="phase reveal"><span class="mono">PHASE 01 / AVAILABLE</span><div class="phase-icon">[ ↗ ]</div><h3>Explorer</h3><p>Signature lookup, instruction decoding and readable transaction errors.</p><span class="phase-tag">PUBLIC CHAIN DATA</span></article><article class="phase reveal"><span class="mono">PHASE 02 / PLANNED</span><div class="phase-icon">{ ↔ }</div><h3>Developer SDK</h3><p>Application timestamps connected with RPC observations.</p><span class="phase-tag">CLIENT INSTRUMENTATION</span></article><article class="phase reveal"><span class="mono">PHASE 03 / RESEARCH</span><div class="phase-icon">&lt; ↺ &gt;</div><h3>Replay</h3><p>Investigate re-simulation where historical state is available.</p><span class="phase-tag">HISTORICAL CONTEXT</span></article></div>
+  <p class="architecture-note">A public RPC does not expose every internal validator event. SLOTRACE's proposed scope separates on-chain evidence from client observations.</p>
+</section>
+<section class="token-section" id="token"><div class="wrap token-inner"><div><span class="eyebrow">$SLOT / TOKEN UTILITY</span><h2>Power the signal<span>.</span></h2><p>A proposed utility layer for advanced API access and verifiable data contributions.</p></div><div class="token-side"><span class="token-symbol" aria-hidden="true">↗</span><p>Utility is under design.<br>No token or contract is live.</p><a class="button dark" href="/token/">Explore $SLOT <span>↗</span></a></div></div></section>
+<section class="docs-teaser wrap"><span class="eyebrow">THE FIELD MANUAL / DOCS</span><div><h2>Understand the signal.</h2><p>Explore the architecture, the evidence behind a trace and the proposed role of $SLOT.</p><a class="button primary" href="/docs/">Open documentation <span>↗</span></a></div><a class="teaser-index" href="/docs/how-it-works/"><span class="mono">01 / HOW IT WORKS</span><strong>Read the system<span>↗</span></strong></a></section><section class="closing wrap"><span class="mono muted">END OF TRACE / START OF SOMETHING</span><h2 class="reveal">Less guessing.<br>More tracing<span class="yellow">.</span></h2><a class="text-link" href="#explorer">Run another trace <span>↑</span></a></section>
+</main>
+{{FOOTER}}
+
+
+</body></html>
