@@ -2,7 +2,7 @@
 
 Solana transaction inspection for developers. SLOTRACE retrieves confirmed transaction records through a server-side RPC gateway and displays execution status, fees, compute usage, instructions, logs and accounts.
 
-**Website:** https://slotrace-lab.bubblycrow18.chatgpt.site/
+**Website:** https://slotrace.tech/
 
 **Token ticker:** `$SLOT`. The token has not launched. The contract address remains `soon` until an official mint is published.
 
