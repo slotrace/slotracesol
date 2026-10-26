@@ -1,0 +1,9 @@
+{
+  "developer": "CaA5KuiSLde3GwG7c38awS9M4Ah8zA1QbzTPnacshvHD",
+  "platform": "pump.fun",
+  "symbol": "SLOT",
+  "expectedName": "SLOTRACE",
+  "workerName": "slotracesol",
+  "siteUrl": "https://slotrace.tech",
+  "pollMs": 3000
+}

@@ -38,6 +38,7 @@ export async function transactionResponse(request,env={},upstreamFetch=fetch){
 export default {
   async fetch(request,env){
     const url=new URL(request.url);
+    if(url.pathname==='/api/token')return tokenResponse(request,env);
     if(url.pathname==='/api/transaction')return transactionResponse(request,env);
     if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405});
     let path;try{path=decodeURIComponent(url.pathname);}catch(_){return new Response('Bad request',{status:400});}
@@ -49,3 +50,19 @@ export default {
     return new Response(request.method==='HEAD'?null:body,{headers:{'Content-Type':asset.type,'Cache-Control':path.endsWith('.html')?'no-cache':'public, max-age=60','X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin'}});
   }
 };
+
+// Public token identity is runtime data, so publication needs no asset rebuild.
+export function tokenResponse(request,env={}){
+  if(request.method!=='GET')return json({error:'Method not allowed.'},405);
+  if(!env.SLOT_TOKEN)return json({symbol:'SLOT',status:'pending',mint:null});
+  try{
+    const token=JSON.parse(env.SLOT_TOKEN);
+    const alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    if(token.symbol!=='SLOT'||typeof token.mint!=='string'||token.mint.length>44||token.mint.length<32)throw new Error();
+    let number=0n;for(const char of token.mint){const n=alphabet.indexOf(char);if(n<0)throw new Error();number=number*58n+BigInt(n);}
+    let length=0;while(number){length++;number>>=8n;}length+=token.mint.match(/^1*/)[0].length;if(length!==32)throw new Error();
+    if(!validSignature(token.signature)||!Number.isSafeInteger(token.slot)||token.slot<1)throw new Error();
+    if(token.developer!=='CaA5KuiSLde3GwG7c38awS9M4Ah8zA1QbzTPnacshvHD'||token.platform!=='pump.fun')throw new Error();
+    return json({symbol:'SLOT',status:'published',mint:token.mint,signature:token.signature,slot:token.slot,developer:token.developer,platform:'pump.fun',explorerUrl:'https://explorer.solana.com/address/'+token.mint,launchUrl:'https://pump.fun/coin/'+token.mint});
+  }catch{return json({error:'Token identity is not configured correctly.'},503);}
+}

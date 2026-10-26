@@ -7,7 +7,16 @@
     "build": "python scripts/build-pages.py && node scripts/build-worker.mjs",
     "start": "node scripts/serve.mjs",
     "test": "node --test",
-    "check:links": "python scripts/check-links.py"
+    "check:links": "python scripts/check-links.py",
+    "launch:arm": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs arm",
+    "launch:watch": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs watch",
+    "launch:publish": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs publish",
+    "launch:status": "node --env-file=.env.local --env-file=.env.launch.local scripts/launch/cli.mjs status"
   },
-  "engines": {"node": ">=20"}
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "wrangler": "4.153.0"
+  }
 }

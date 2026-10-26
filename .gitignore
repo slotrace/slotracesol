@@ -15,3 +15,6 @@ dist/
 .openai/
 public/**/*.html
 public/docs/search-index.json
+
+.launch-state*.json*
+.wrangler/

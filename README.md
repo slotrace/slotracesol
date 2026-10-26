@@ -1,45 +1,30 @@
 # SLOTRACE
 
-Solana transaction inspection for developers. SLOTRACE retrieves confirmed transaction records through a server-side RPC gateway and displays execution status, fees, compute usage, instructions, logs and accounts.
+Transaction intelligence for Solana. Inspect confirmed transactions by signature: execution status, fees, compute usage, instructions, program logs and involved accounts. Read-only access; no wallet connection required.
 
-**Website:** https://slotrace.tech/
+**Website:** [slotrace.tech](https://slotrace.tech/) · **Explorer:** [Open Explorer](https://slotrace.tech/explorer/) · **Docs:** [Documentation](https://slotrace.tech/docs/) · **X:** [@slotrace_tech](https://x.com/slotrace_tech)
 
-**Token ticker:** `$SLOT`. The token has not launched. The contract address remains `soon` until an official mint is published.
+## Token
 
-## Features
+**Ticker: `$SLOT`** · **Network: Solana**
 
-- Mainnet and Devnet signature lookup, with no wallet connection.
-- Parsed and raw instruction inspection, including inner instructions.
-- Source-labeled chain metadata and raw execution errors.
-- Searchable documentation, responsive pages and GSAP motion.
-- Pause controls and reduced-motion support.
-- Server-only private RPC credentials; they are never compiled into browser assets.
+The official mint address will appear in the website header and on the [token page](https://slotrace.tech/token/) after verified publication. Until then, the site displays `CA: soon`.
 
-The SDK, historical replay and contributor economy are development directions. The homepage signal route visualizes a workflow; it is not a live internal-validator timing feed.
+Token utility remains under development. Basic transaction inspection does not require a token. The SDK, replay and contributor network are planned capabilities, not currently available services.
 
-## Requirements
+## Run locally
 
-- Node.js 20 or newer.
-- Python 3.10 or newer for page generation.
-- An HTTPS Solana Mainnet RPC endpoint with `getTransaction` support.
-
-There are no npm runtime dependencies. GSAP and ScrollTrigger 3.14.2 are vendored with their original license notices.
-
-## Local development
-
-1. Copy `.env.example` to `.env.local`.
-2. Set `SOLANA_RPC_URL` in `.env.local`. Never commit this file.
-3. Build and start:
+Requires Node.js 22+ and Python 3.10+.
 
 ```sh
+cp .env.example .env.local
+# Set SOLANA_RPC_URL in .env.local.
 python scripts/build-pages.py
 node scripts/build-worker.mjs
 node scripts/serve.mjs
 ```
 
-Open `http://127.0.0.1:4174`. The local server loads `.env.local` without printing values. Set `PORT` to change the port.
-
-Devnet uses the public endpoint unless `SOLANA_DEVNET_RPC_URL` is configured. Endpoints must allow server requests; provider limits and history coverage affect availability.
+Open `http://127.0.0.1:4174`. Keep RPC credentials server-side; never commit `.env.local`.
 
 ## Checks
 
@@ -49,35 +34,24 @@ python scripts/check-links.py
 node scripts/validate-artifact.mjs
 ```
 
-Tests cover signature validation, missing metadata, raw execution errors, inner instructions, invalid API requests and secret-safe errors. Unit tests do not require live credentials.
+## Source and deployment
 
-## Source layout
+- `src/` — maintained page templates and documentation.
+- `public/` — browser code, styles, logo and generated pages.
+- `worker/index.mjs` — RPC gateway, token identity API and asset serving.
+- `scripts/` — build tools, local preview and launch monitor.
+- `tests/` — transaction, API and launch verification tests.
 
-```text
-src/                Maintained page templates and documentation articles
-public/             Browser scripts, styles, icons, cursors and generated pages
-worker/index.mjs    Read-only API boundary and asset serving
-scripts/            Page generation, Worker build, local server and checks
-tests/              Transaction and server unit tests
-dist/               Generated Worker artifact; excluded from Git
-```
+The build emits `dist/server/index.js` for Cloudflare Workers. Configure `SOLANA_RPC_URL` as a **runtime secret**. Devnet optionally uses `SOLANA_DEVNET_RPC_URL`. Transaction reads support legacy, v0 and v1 records.
 
-Edit text and page structure in `src/`, not generated HTML. Edit browser code and styles in `public/`. Rebuild after changes. Optional cursor regeneration requires Pillow; cursor assets are already included.
+There are no application runtime npm dependencies. Wrangler is a development tool used to publish token identity. The private RPC URL and Cloudflare token are never embedded in public assets.
 
-## API and secrets
+## Launch monitor
 
-`GET /api/transaction?network=mainnet&signature=<base58 signature>` returns the upstream record, including `null` if unavailable. Only Mainnet and Devnet are accepted. The server fixes the method to `getTransaction`, requests confirmed commitment and supports legacy/v0 transaction records.
+The monitor verifies a successful, finalized pump.fun creation by the configured developer, the exact name `SLOTRACE`, ticker `SLOT` and initialized mint. It does not trade, sign wallet transactions or require a wallet private key.
 
-The browser cannot specify an upstream URL or arbitrary method. Provider error messages are sanitized because they may contain private URLs. The gateway uses a timeout and a bounded, per-instance request limiter. Configure deployment-wide rate limiting at the hosting edge for higher traffic.
-
-Keep production credentials in runtime secrets, not source files, hosting manifests or frontend variables. `.env.local` is ignored; `.env.example` has empty values.
-
-## Deployment
-
-The build emits `dist/server/index.js`, a dependency-free Worker ESM module with embedded static assets. Configure `SOLANA_RPC_URL` as a runtime secret; optionally configure `SOLANA_DEVNET_RPC_URL`.
-
-For Sites deployment, keep project identity in the local `.openai/hosting.json`. This deployment-specific file is excluded from the GitHub export. Other Worker hosts can serve the ESM module with their own deployment configuration.
+Setup, commands and operational limits: [Launch monitor guide](docs/launch-monitor.md).
 
 ## Third-party software
 
-See [THIRD_PARTY.md](THIRD_PARTY.md). Project-specific licensing has not been selected; third-party software retains its own licenses.
+See [THIRD_PARTY.md](THIRD_PARTY.md). Project licensing has not been selected; third-party software retains its own licenses.
